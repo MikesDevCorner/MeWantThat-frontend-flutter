@@ -8,6 +8,8 @@ environment:
 
 dependencies:
   http: any
+  moment: ^0.0.1
+  flutter_secure_storage: ^3.3.3
   flutter:
     sdk: flutter
   cupertino_icons: ^0.1.3

@@ -1,3 +1,5 @@
+import 'package:http/http.dart';
+
 import '../Classes/ShoppingList.dart';
 import '../Libs/ApiService.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,29 +7,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class NewEntryView extends StatefulWidget {
-
-  final ShoppingList shoppingList;
-  NewEntryView({Key key, @required this.shoppingList}) : super(key: key);
-
+  NewEntryView({Key key}) : super(key: key);
   @override
   NewEntryViewState createState() {
-    return NewEntryViewState(shoppingList: shoppingList);
+    return NewEntryViewState();
   }
-
 }
 
 class NewEntryViewState extends State<NewEntryView> {
   final _formKey = GlobalKey<FormState>();
-  final ShoppingList shoppingList;
-  NewEntryViewState({@required this.shoppingList}) : super();
+  ShoppingList shoppingList;
+  NewEntryViewState() : super();
   final myNameController = TextEditingController();
   final myAmountController = TextEditingController(text: '1');
 
   @override
   Widget build(BuildContext context) {
+    this.shoppingList = ModalRoute.of(context).settings.arguments;
     return Scaffold(
         appBar: AppBar(
-          title: Text(shoppingList.listenname + ": New Entry"),
+          title: Text(shoppingList.listname + ": New Entry"),
         ),
         body: Builder(
             builder: (ctxt) => Center(
@@ -65,9 +64,13 @@ class NewEntryViewState extends State<NewEntryView> {
                               } else {
                                 Scaffold.of(ctxt).showSnackBar(SnackBar(content:
                                 Text('Creating entry...')));
-                                await ApiService.addListEntry(shoppingList.id,
+                                Response r = await ApiService.addListEntry(shoppingList.id,
                                     int.parse(myAmountController.text), myNameController.text);
-                                Navigator.pop(ctxt, true);
+                                if(r.statusCode == 401) {
+                                  Navigator.pushNamedAndRemoveUntil(context,
+                                      '/login', (route) => false);
+                                }
+                                else Navigator.pop(ctxt, true);
                               }
                             },
                             child: Text('Save'),

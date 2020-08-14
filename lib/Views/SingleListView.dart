@@ -7,31 +7,19 @@ import 'package:flutter/material.dart';
 
 
 class SingleListView extends StatefulWidget {
-
-  final ShoppingList shoppingList;
-  SingleListView({Key key, @required this.shoppingList}) : super(key: key);
-
+  SingleListView({Key key}) : super(key: key);
   @override
-  SingleListViewState createState() => new SingleListViewState(shoppingList: shoppingList);
-
+  SingleListViewState createState() => new SingleListViewState();
 }
 
 
 class SingleListViewState extends State<SingleListView> {
 
-  final ShoppingList shoppingList;
-
-  // In the constructor, require a ShoppingList.
-  SingleListViewState({@required this.shoppingList}) : super();
-
+  ShoppingList shoppingList;
+  SingleListViewState() : super();
 
   navigateNewEntry(BuildContext context, BuildContext snackbarContext) async {
-    final bool result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => NewEntryView(shoppingList: shoppingList),
-      ),
-    );
+    final bool result = await Navigator.pushNamed(context, '/new-entry', arguments: shoppingList);
     if(result == true) Scaffold
         .of(snackbarContext)
         .showSnackBar(SnackBar(content: Text('Entry added successfully.')));
@@ -40,9 +28,10 @@ class SingleListViewState extends State<SingleListView> {
 
   @override
   Widget build(BuildContext context) {
+    this.shoppingList = ModalRoute.of(context).settings.arguments;
     return Scaffold(
         appBar: AppBar(
-          title: Text('List: ' + shoppingList.listenname),
+          title: Text('List: ' + shoppingList.listname),
         ),
         body: Center(
         child: FutureBuilder(
@@ -51,7 +40,10 @@ class SingleListViewState extends State<SingleListView> {
             if (snapshot.hasData) {
               return _singleListView(snapshot.data);
             } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
+              if(snapshot.error.toString() == '401') {
+                Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
+              }
+              else return Text("${snapshot.error}");
             }
             // By default, show a loading spinner
             return CircularProgressIndicator();
@@ -78,12 +70,12 @@ class SingleListViewState extends State<SingleListView> {
 
 
   ListTile _tile(ShoppingEntry entry, IconData icon, BuildContext context) => ListTile(
-    title: Text(entry.postenname,
+    title: Text(entry.entryname,
         style: TextStyle(
           fontWeight: FontWeight.w500,
           fontSize: 20,
         )),
-    subtitle: Text('Amount: '+entry.anzahl.toString() + 'x'),
+    subtitle: Text('Amount: '+entry.amount.toString() + 'x'),
     leading: Icon(
       icon,
       color: Colors.blue[500],
