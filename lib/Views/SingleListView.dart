@@ -1,5 +1,4 @@
 import '../Classes/ShoppingList.dart';
-import '../Views/NewEntryView.dart';
 import '../Classes/ShoppingEntry.dart';
 import '../Libs/ApiService.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,7 +18,7 @@ class SingleListViewState extends State<SingleListView> {
   SingleListViewState() : super();
 
   navigateNewEntry(BuildContext context, BuildContext snackbarContext) async {
-    final bool result = await Navigator.pushNamed(context, '/new-entry', arguments: shoppingList);
+    final dynamic result = await Navigator.pushNamed(context, '/new-entry', arguments: shoppingList);
     if(result == true) Scaffold
         .of(snackbarContext)
         .showSnackBar(SnackBar(content: Text('Entry added successfully.')));
@@ -32,6 +31,18 @@ class SingleListViewState extends State<SingleListView> {
     return Scaffold(
         appBar: AppBar(
           title: Text('List: ' + shoppingList.listname),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.power_settings_new,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                ApiService.logout();
+                Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
+              },
+            )
+          ],
         ),
         body: Center(
         child: FutureBuilder(

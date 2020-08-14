@@ -21,15 +21,23 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
 
+  bool alreadyInitiated = false;
+
   @override
   void initState() {
-    //AuthService.init();
+    doInitiation();
     super.initState();
   }
 
+  doInitiation() async {
+    alreadyInitiated = await AuthService.init();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
+    if(alreadyInitiated == false) return new Container(color: Colors.lightBlue);
+
     return MaterialApp(
       title: 'Shopping Lists',
       initialRoute: '/',

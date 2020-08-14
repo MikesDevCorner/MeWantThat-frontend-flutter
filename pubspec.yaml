@@ -8,8 +8,9 @@ environment:
 
 dependencies:
   http: any
-  moment: ^0.0.1
+  intl: ^0.16.1
   flutter_secure_storage: ^3.3.3
+  font_awesome_flutter: ^8.8.1
   flutter:
     sdk: flutter
   cupertino_icons: ^0.1.3

@@ -4,38 +4,31 @@ import 'dart:convert';
 import '../Classes/ShoppingList.dart';
 import '../Classes/ShoppingEntry.dart';
 import './AuthService.dart';
+import 'dart:developer' as developer;
 
 class ApiService {
 
-  static final String url = 'http://10.0.2.2:8000/api'; //'https://masterthesis2.mikesdevcorner.com/api';
-
-  static Future<bool> test() async {
-    final response = await http.get(ApiService.url + '/test');
-    if (response.statusCode == 200) return true;
-    else return false;
-  }
+  static final String url = 'https://masterthesis2.mikesdevcorner.com/api';
 
 
-  static Future<bool> login(String email, String password) async {
-    Map headers = AuthService.getHeaders();
-    final response = await http.post(ApiService.url + '/login',
-      headers: {"Content-type": "application/json", "Accept": "application/json"},
-      body: jsonEncode(<String, String>{
-        'email': email,
-        'password': password
-      })
-    );
-    if (response.statusCode == 202) {
-      final Map parsed = json.decode(response.body);
-
-      //await AuthService.setToken(jsonResult['success']['token']);
-      return true;
-    } else if(AuthService.checkUnauthenticated(response)) {
-      return false;
-    }
-    else {
-      throw Exception("some error occured during login");
-    }
+  static Future<dynamic> login(String email, String password) async {
+      final response = await http.post(ApiService.url + '/login',
+          headers: AuthService.getHeaders(),
+          body: jsonEncode(<String, String>{
+            'email': email,
+            'password': password
+          })
+      );
+      if (response.statusCode == 202) {
+        final Map parsed = json.decode(response.body);
+        await AuthService.setToken(parsed['success']['token']);
+        return true;
+      } else {
+        if (await AuthService.checkUnauthenticated(response))
+          return false;
+        else
+          throw Exception("some error occured during login");
+      }
   }
 
   static Future<bool> register(String email, String password, String passwordConfirm, String name) async {
@@ -48,9 +41,10 @@ class ApiService {
           'password_confirmation': passwordConfirm
         }));
     if (response.statusCode == 201) {
-      await AuthService.setToken(json.decode(response.body).success.token);
+      final Map parsed = json.decode(response.body);
+      await AuthService.setToken(parsed['success']['token']);
       return true;
-    } else if(AuthService.checkUnauthenticated(response)) {
+    } else if(await AuthService.checkUnauthenticated(response)) {
       return false;
     }
     else {
@@ -58,8 +52,10 @@ class ApiService {
     }
   }
 
-  static Future<bool> logout() async {
-    //TODO
+  static bool logout() {
+    http.post(ApiService.url + '/logout', headers: AuthService.getHeaders());
+    AuthService.setToken(null);
+    return true;
   }
 
   static Future<List<ShoppingList>> fetchShoppingLists() async {
@@ -67,7 +63,7 @@ class ApiService {
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
       return jsonResponse.map((sl) => new ShoppingList.fromJson(sl)).toList();
-    } else if(AuthService.checkUnauthenticated(response)) {
+    } else if(await AuthService.checkUnauthenticated(response)) {
       throw Exception("401"); //Unauthenticated
     }
     else {
@@ -82,7 +78,7 @@ class ApiService {
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
       return jsonResponse.map((se) => new ShoppingEntry.fromJson(se)).toList();
-    } else if(AuthService.checkUnauthenticated(response)) {
+    } else if(await AuthService.checkUnauthenticated(response)) {
       throw Exception("401"); //Unauthenticated
     }
     else {

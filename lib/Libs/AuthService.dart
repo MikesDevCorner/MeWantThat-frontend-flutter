@@ -25,16 +25,17 @@ class AuthService {
     }
   }
 
-  static init() async {
+  static Future<bool> init() async {
     String token = await storage.read(key: 'token');
     AuthService.setToken(token, true);
+    return true;
   }
 
   static Map<String, String> getHeaders() {
     return AuthService._headers;
   }
 
-  static checkUnauthenticated(Response response) async {
+  static Future<bool> checkUnauthenticated(Response response) async {
     if(response.statusCode == 401) {
       await AuthService.setToken(null);
       return true;

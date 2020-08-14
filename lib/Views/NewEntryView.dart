@@ -27,6 +27,18 @@ class NewEntryViewState extends State<NewEntryView> {
     return Scaffold(
         appBar: AppBar(
           title: Text(shoppingList.listname + ": New Entry"),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.power_settings_new,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                ApiService.logout();
+                Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
+              },
+            )
+          ],
         ),
         body: Builder(
             builder: (ctxt) => Center(

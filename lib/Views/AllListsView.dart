@@ -1,10 +1,10 @@
+import 'package:intl/intl.dart';
+
 import '../Classes/ShoppingList.dart';
 import '../Libs/ApiService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../Views/SingleListView.dart';
-import '../Views/NewListView.dart';
-import 'package:moment/moment.dart';
+
 
 class AllListsView extends StatefulWidget {
   @override
@@ -13,11 +13,25 @@ class AllListsView extends StatefulWidget {
 
 class AllListsViewState extends State<AllListsView> {
 
+  final DateFormat myDFormat = DateFormat('yyyy-MM-dd HH:mm');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Shopping Lists'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.power_settings_new,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              ApiService.logout();
+              Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
+            },
+          )
+        ],
       ),
       body: Center(
         child: FutureBuilder(
@@ -39,7 +53,7 @@ class AllListsViewState extends State<AllListsView> {
       floatingActionButton: Builder(
         builder: (ctxt) => FloatingActionButton(
           onPressed: () async {
-            final bool result = await Navigator.pushNamed(context, '/new-list');
+            final dynamic result = await Navigator.pushNamed(context, '/new-list');
             if(result == true) {
               Scaffold.of(ctxt).showSnackBar(
                   SnackBar(content: Text('List added successfully.')));
@@ -68,7 +82,7 @@ class AllListsViewState extends State<AllListsView> {
           fontWeight: FontWeight.w500,
           fontSize: 20,
         )),
-    subtitle: Text(Moment(shoppingList.created_at).format("YYYY-MM-DD HH:mm")),
+    subtitle: Text(myDFormat.format(DateTime.parse(shoppingList.created_at).toLocal())),
     leading: Icon(
       icon,
       color: Colors.blue[500],
@@ -81,7 +95,7 @@ class AllListsViewState extends State<AllListsView> {
       this.setState(() {});
     }),
     onTap: () async {
-      await Navigator.pushNamed(context, '/single-list', arguments: shoppingList);
+      Navigator.pushNamed(context, '/single-list', arguments: shoppingList);
       this.setState(() {});
     },
   );
