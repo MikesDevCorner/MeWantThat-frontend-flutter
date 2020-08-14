@@ -31,7 +31,7 @@ class ApiService {
       }
   }
 
-  static Future<bool> register(String email, String password, String passwordConfirm, String name) async {
+  static Future<dynamic> register(String email, String password, String passwordConfirm, String name) async {
     final response = await http.post(ApiService.url + '/login',
         headers: AuthService.getHeaders(),
         body: jsonEncode(<String, String>{
