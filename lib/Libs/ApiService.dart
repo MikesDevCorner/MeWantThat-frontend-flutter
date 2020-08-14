@@ -1,89 +1,136 @@
+import 'package:ShoppingList_Flutter/Libs/AuthService.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import '../Classes/ShoppingList.dart';
 import '../Classes/ShoppingEntry.dart';
-
+import './AuthService.dart';
+import 'dart:developer' as developer;
 
 class ApiService {
 
-  static final String url = 'https://masterthesis.mikesdevcorner.com';
+  static final String url = 'https://masterthesis2.mikesdevcorner.com/api';
+
+
+  static Future<dynamic> login(String email, String password) async {
+      final response = await http.post(ApiService.url + '/login',
+          headers: AuthService.getHeaders(),
+          body: jsonEncode(<String, String>{
+            'email': email,
+            'password': password
+          })
+      );
+      if (response.statusCode == 202) {
+        final Map parsed = json.decode(response.body);
+        await AuthService.setToken(parsed['success']['token']);
+        return true;
+      } else {
+        if (await AuthService.checkUnauthenticated(response))
+          return false;
+        else
+          throw Exception("some error occured during login");
+      }
+  }
+
+  static Future<dynamic> register(String email, String password, String passwordConfirm, String name) async {
+    final response = await http.post(ApiService.url + '/login',
+        headers: AuthService.getHeaders(),
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'password': password,
+          'name': name,
+          'password_confirmation': passwordConfirm
+        }));
+    if (response.statusCode == 201) {
+      final Map parsed = json.decode(response.body);
+      await AuthService.setToken(parsed['success']['token']);
+      return true;
+    } else if(await AuthService.checkUnauthenticated(response)) {
+      return false;
+    }
+    else {
+      throw Exception("some error occured during register");
+    }
+  }
+
+  static bool logout() {
+    http.post(ApiService.url + '/logout', headers: AuthService.getHeaders());
+    AuthService.setToken(null);
+    return true;
+  }
 
   static Future<List<ShoppingList>> fetchShoppingLists() async {
-    final response = await http.get(ApiService.url + '/api/lists');
+    final response = await http.get(ApiService.url + '/lists', headers: AuthService.getHeaders());
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
-      //debugPrint(jsonResponse[0]["listenname"]);
       return jsonResponse.map((sl) => new ShoppingList.fromJson(sl)).toList();
-    } else {
+    } else if(await AuthService.checkUnauthenticated(response)) {
+      throw Exception("401"); //Unauthenticated
+    }
+    else {
       throw Exception("failed to load shopping lists from API");
     }
   }
 
 
   static Future<List<ShoppingEntry>> fetchShoppingEntries(int listId) async {
-    final response = await http.get(ApiService.url + '/api/entries/' +
-        listId.toString());
+    final response = await http.get(ApiService.url + '/list/' +
+        listId.toString() + '/entries', headers: AuthService.getHeaders());
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
       return jsonResponse.map((se) => new ShoppingEntry.fromJson(se)).toList();
-    } else {
+    } else if(await AuthService.checkUnauthenticated(response)) {
+      throw Exception("401"); //Unauthenticated
+    }
+    else {
       throw Exception("failed to load shopping entries from API");
     }
   }
 
 
-  static Future<bool> deleteShoppingList(int id) async {
-    debugPrint("delete list with id " + id.toString());
-    final response = await http.delete(ApiService.url + '/api/list/' +
-        id.toString());
-    if(response.statusCode == 204) return true;
+  static Future<http.Response> deleteShoppingList(int id) async {
+    final response = await http.delete(ApiService.url + '/list/' +
+        id.toString(), headers: AuthService.getHeaders());
+    AuthService.checkUnauthenticated(response);
+    if(response.statusCode == 200 || response.statusCode == 401) return response;
     else throw Exception("failed to delete list over API");
   }
 
 
-  static Future<bool> deleteListEntry(int id) async {
-    debugPrint("delete entry with id " + id.toString());
-    final response = await http.delete(ApiService.url + '/api/entry/' +
-        id.toString());
-    if(response.statusCode == 204) return true;
+  static Future<http.Response> deleteListEntry(int id) async {
+    final response = await http.delete(ApiService.url + '/entry/' +
+        id.toString(), headers: AuthService.getHeaders());
+    AuthService.checkUnauthenticated(response);
+    if(response.statusCode == 200 || response.statusCode == 401) return response;
     else throw Exception("failed to delete entry over API");
   }
 
 
-  static Future<bool> addShoppingList(String name) async {
-    debugPrint("added new shopping list with name " + name);
+  static Future<http.Response> addShoppingList(String name) async {
     final response = await http.post(
-      ApiService.url + '/api/list',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      ApiService.url + '/list',
+      headers: AuthService.getHeaders(),
       body: jsonEncode(<String, String>{
-        'listenname': name,
+        'listname': name,
       }),
     );
-    if(response.statusCode == 201) return true;
+    AuthService.checkUnauthenticated(response);
+    if(response.statusCode == 201 || response.statusCode == 401) return response;
     else throw Exception("failed to save new list over API");
   }
 
 
-  static Future<bool> addListEntry(int listId, int amount,
+  static Future<http.Response> addListEntry(int listId, int amount,
       String entryName) async {
-    debugPrint("added " + amount.toString() + "x " + entryName +
-        " to shopping list with id " + listId.toString());
-    final sendData = jsonEncode(<String, String>{
-      'postenname': entryName,
-      'anzahl': amount.toString(),
-      'einkaufsliste_id': listId.toString()
-    });
     final response = await http.post(
-      ApiService.url + '/api/entry',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: sendData,
+      ApiService.url + '/list/' + listId.toString() +'/entry',
+      headers: AuthService.getHeaders(),
+      body: jsonEncode(<String, String>{
+        'entryname': entryName,
+        'amount': amount.toString()
+      })
     );
-    if(response.statusCode == 201) return true;
+    AuthService.checkUnauthenticated(response);
+    if(response.statusCode == 201 || response.statusCode == 401) return response;
     else throw Exception("failed to save new entry over API");
   }
 

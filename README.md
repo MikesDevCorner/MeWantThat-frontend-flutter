@@ -1,6 +1,6 @@
-# einkaufslisteflutter
+# shoppinglistflutter
 
-Einkaufsliste
+Shopping List Flutter
 
 ## Getting Started
 

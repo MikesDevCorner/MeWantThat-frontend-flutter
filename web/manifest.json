@@ -1,11 +1,11 @@
 {
-    "name": "einkaufslisteflutter",
-    "short_name": "einkaufslisteflutter",
+    "name": "shoppinglistflutter",
+    "short_name": "shoppinglistflutter",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Einkaufsliste",
+    "description": "Shopping List",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

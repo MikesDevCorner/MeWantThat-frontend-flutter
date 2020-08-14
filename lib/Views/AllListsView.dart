@@ -1,9 +1,10 @@
+import 'package:intl/intl.dart';
+
 import '../Classes/ShoppingList.dart';
 import '../Libs/ApiService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../Views/SingleListView.dart';
-import '../Views/NewListView.dart';
+
 
 class AllListsView extends StatefulWidget {
   @override
@@ -12,11 +13,25 @@ class AllListsView extends StatefulWidget {
 
 class AllListsViewState extends State<AllListsView> {
 
+  final DateFormat myDFormat = DateFormat('yyyy-MM-dd HH:mm');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Shopping Lists'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.power_settings_new,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              ApiService.logout();
+              Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
+            },
+          )
+        ],
       ),
       body: Center(
         child: FutureBuilder(
@@ -25,7 +40,10 @@ class AllListsViewState extends State<AllListsView> {
             if (snapshot.hasData) {
               return _shoppingListView(snapshot.data);
             } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
+              if(snapshot.error.toString() == '401') {
+                Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
+              }
+              else return Text("${snapshot.error}");
             }
             // By default, show a loading spinner
             return CircularProgressIndicator();
@@ -35,12 +53,7 @@ class AllListsViewState extends State<AllListsView> {
       floatingActionButton: Builder(
         builder: (ctxt) => FloatingActionButton(
           onPressed: () async {
-            final bool result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => NewListView(),
-              ),
-            );
+            final dynamic result = await Navigator.pushNamed(context, '/new-list');
             if(result == true) {
               Scaffold.of(ctxt).showSnackBar(
                   SnackBar(content: Text('List added successfully.')));
@@ -64,12 +77,12 @@ class AllListsViewState extends State<AllListsView> {
 
   ListTile _tile(ShoppingList shoppingList, IconData icon,
       BuildContext context) => ListTile(
-    title: Text(shoppingList.listenname,
+    title: Text(shoppingList.listname,
         style: TextStyle(
           fontWeight: FontWeight.w500,
           fontSize: 20,
         )),
-    subtitle: Text(shoppingList.created_at),
+    subtitle: Text(myDFormat.format(DateTime.parse(shoppingList.created_at).toLocal())),
     leading: Icon(
       icon,
       color: Colors.blue[500],
@@ -82,12 +95,7 @@ class AllListsViewState extends State<AllListsView> {
       this.setState(() {});
     }),
     onTap: () async {
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SingleListView(shoppingList: shoppingList),
-        ),
-      );
+      Navigator.pushNamed(context, '/single-list', arguments: shoppingList);
       this.setState(() {});
     },
   );
