@@ -88,7 +88,6 @@ class RegisterViewState extends State<RegisterView> {
                         style: TextStyle(color: Colors.white),
                         decoration: InputDecoration(labelText: 'Name', labelStyle: TextStyle(color: Colors.white)),
                         keyboardType: TextInputType.text,
-                        obscureText: true,
                         controller: myNameController,
                         validator: validateName
                       ),
