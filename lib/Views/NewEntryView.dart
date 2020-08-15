@@ -28,28 +28,32 @@ class NewEntryViewState extends State<NewEntryView> {
         appBar: AppBar(
           title: Text(shoppingList.listname + ": New Entry"),
           actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.power_settings_new,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                ApiService.logout();
-                Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
-              },
+        Container(
+          padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+          child: IconButton(
+                icon: Icon(
+                  Icons.power_settings_new,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  ApiService.logout();
+                  Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
+                },
+              )
             )
           ],
         ),
-        body: Builder(
+        body: SingleChildScrollView(
+            child:Builder(
             builder: (ctxt) => Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(40.0),
                   child:Form(
                     key: _formKey,
                     child: Column(
                         children: <Widget>[
                           TextFormField(
-                            decoration: InputDecoration(labelText: 'New Entry'),
+                            decoration: InputDecoration(labelText: 'Entryname'),
                             controller: myNameController,
                             validator: (value) {
                               if (value.isEmpty) {return 'Please enter a name';}
@@ -68,30 +72,39 @@ class NewEntryViewState extends State<NewEntryView> {
                               return null;
                             },
                           ),
-                          RaisedButton(
-                            onPressed: () async {
-                              if (_formKey.currentState.validate() == false) {
-                                Scaffold.of(ctxt).showSnackBar(SnackBar(content:
-                                Text('Fields should not be empty.')));
-                              } else {
-                                Scaffold.of(ctxt).showSnackBar(SnackBar(content:
-                                Text('Creating entry...')));
-                                Response r = await ApiService.addListEntry(shoppingList.id,
-                                    int.parse(myAmountController.text), myNameController.text);
-                                if(r.statusCode == 401) {
-                                  Navigator.pushNamedAndRemoveUntil(context,
-                                      '/login', (route) => false);
-                                }
-                                else Navigator.pop(ctxt, true);
-                              }
-                            },
-                            child: Text('Save'),
+                          new SizedBox(
+                            height: 20.0,
+                          ),
+                          ConstrainedBox(
+                              constraints: const BoxConstraints(minWidth: double.infinity),
+                              child: RaisedButton(
+                                color: Colors.blue,
+                                textColor: Colors.white,
+                                onPressed: () async {
+                                  if (_formKey.currentState.validate() == false) {
+                                    Scaffold.of(ctxt).showSnackBar(SnackBar(content:
+                                    Text('Fields should not be empty.')));
+                                  } else {
+                                    Scaffold.of(ctxt).showSnackBar(SnackBar(content:
+                                    Text('Creating entry...')));
+                                    Response r = await ApiService.addListEntry(shoppingList.id,
+                                        int.parse(myAmountController.text), myNameController.text);
+                                    if(r.statusCode == 401) {
+                                      Navigator.pushNamedAndRemoveUntil(context,
+                                          '/login', (route) => false);
+                                    }
+                                    else Navigator.pop(ctxt, true);
+                                  }
+                                },
+                                child: Text('Save'),
+                              )
                           )
                         ]
                     )
                 )
               )
             )
+          )
         )
     );
   }

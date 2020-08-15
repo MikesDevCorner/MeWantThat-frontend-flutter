@@ -21,15 +21,18 @@ class AllListsViewState extends State<AllListsView> {
       appBar: AppBar(
         title: Text('Shopping Lists'),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.power_settings_new,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              ApiService.logout();
-              Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
-            },
+          Container(
+            padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+            child: IconButton(
+              icon: Icon(
+                Icons.power_settings_new,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                ApiService.logout();
+                Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
+              },
+            )
           )
         ],
       ),
@@ -52,6 +55,7 @@ class AllListsViewState extends State<AllListsView> {
       ),
       floatingActionButton: Builder(
         builder: (ctxt) => FloatingActionButton(
+          backgroundColor: const Color(0xff062f77),
           onPressed: () async {
             final dynamic result = await Navigator.pushNamed(context, '/new-list');
             if(result == true) {

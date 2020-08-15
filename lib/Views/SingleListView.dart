@@ -32,7 +32,9 @@ class SingleListViewState extends State<SingleListView> {
         appBar: AppBar(
           title: Text('List: ' + shoppingList.listname),
           actions: <Widget>[
-            IconButton(
+        Container(
+          padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+          child: IconButton(
               icon: Icon(
                 Icons.power_settings_new,
                 color: Colors.white,
@@ -40,7 +42,7 @@ class SingleListViewState extends State<SingleListView> {
               onPressed: () {
                 ApiService.logout();
                 Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
-              },
+              })
             )
           ],
         ),
@@ -63,6 +65,7 @@ class SingleListViewState extends State<SingleListView> {
       ),
       floatingActionButton: Builder(
         builder: (ctxt) => FloatingActionButton(
+          backgroundColor: const Color(0xff062f77),
           onPressed: () => navigateNewEntry(context, ctxt),
           tooltip: 'add new shopping list',
           child: const Icon(Icons.add),

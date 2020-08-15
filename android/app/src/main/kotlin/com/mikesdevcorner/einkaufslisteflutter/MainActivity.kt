@@ -1,4 +1,4 @@
-package com.mikesdevcorner.masterthesis.flutter
+package com.mikesdevcorner.shopping.flutter
 
 import io.flutter.embedding.android.FlutterActivity
 
