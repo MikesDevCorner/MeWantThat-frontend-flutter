@@ -1,10 +1,10 @@
 import 'package:http/http.dart';
-
-import '../Classes/ShoppingList.dart';
-import '../Libs/ApiService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../Classes/ShoppingList.dart';
+import '../Libs/ApiService.dart';
+import '../Libs/MenuService.dart';
 
 class NewEntryView extends StatefulWidget {
   NewEntryView({Key key}) : super(key: key);
@@ -25,22 +25,20 @@ class NewEntryViewState extends State<NewEntryView> {
   Widget build(BuildContext context) {
     this.shoppingList = ModalRoute.of(context).settings.arguments;
     return Scaffold(
+        endDrawer: MenuService.getDrawer(context),
         appBar: AppBar(
           title: Text(shoppingList.listname + ": New Entry"),
-          actions: <Widget>[
-        Container(
-          padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-          child: IconButton(
-                icon: Icon(
-                  Icons.power_settings_new,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  ApiService.logout();
-                  Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
-                },
-              )
-            )
+          actions: <Widget>[Builder(
+              builder: (ctxt) => Container(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.menu,
+                      color: Theme.of(context).backgroundColor,
+                    ),
+                    onPressed: () => Scaffold.of(ctxt).openEndDrawer(),
+                  )
+              ))
           ],
         ),
         body: SingleChildScrollView(
@@ -78,8 +76,6 @@ class NewEntryViewState extends State<NewEntryView> {
                           ConstrainedBox(
                               constraints: const BoxConstraints(minWidth: double.infinity),
                               child: RaisedButton(
-                                color: Colors.blue,
-                                textColor: Colors.white,
                                 onPressed: () async {
                                   if (_formKey.currentState.validate() == false) {
                                     Scaffold.of(ctxt).showSnackBar(SnackBar(content:

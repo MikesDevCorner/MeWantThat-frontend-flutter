@@ -1,8 +1,9 @@
-import '../Libs/ApiService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import '../Libs/ApiService.dart';
 
 class LoginView extends StatefulWidget {
 
@@ -76,20 +77,21 @@ class LoginViewState extends State<LoginView> {
                       new SizedBox(
                         height: 40.0,
                       ),
-                      Text('Shopping List', style: Theme.of(context).textTheme.headline3.merge(TextStyle(color: Colors.white))),
+                      //Text('Shopping List', style: Theme.of(context).primaryTextTheme.headline3),
+                      Image.asset('assets/logosm.png', height: 200, filterQuality:FilterQuality.high),
                       new SizedBox(
                         height: 40.0,
                       ),
                       TextFormField(
-                        style: TextStyle(color: Colors.white),
-                        decoration: InputDecoration(labelText: 'E-Mail', labelStyle: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Theme.of(context).backgroundColor),
+                        decoration: InputDecoration(labelText: 'E-Mail', labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
                         keyboardType: TextInputType.emailAddress,
                         controller: myEMailController,
                         validator: validateEmail,
                       ),
                       TextFormField(
-                        style: TextStyle(color: Colors.white),
-                        decoration: InputDecoration(labelText: 'Password', labelStyle: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Theme.of(context).backgroundColor),
+                        decoration: InputDecoration(labelText: 'Password', labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
                         keyboardType: TextInputType.text,
                         obscureText: true,
                         controller: myPasswordController,
@@ -101,8 +103,6 @@ class LoginViewState extends State<LoginView> {
                       ConstrainedBox(
                         constraints: const BoxConstraints(minWidth: double.infinity),
                         child: RaisedButton(
-                          color: const Color(0xff062f77),
-                          textColor: Colors.white,
                           onPressed: () {
                             _validateInputs(ctxt);
                           },
@@ -118,12 +118,11 @@ class LoginViewState extends State<LoginView> {
         ),
         floatingActionButton: Builder(
             builder: (ctxt) => FloatingActionButton(
-              backgroundColor: const Color(0xff062f77),
               onPressed: () {
                 Navigator.pushNamed(context, '/register');
               },
               tooltip: 'Switch to Register',
-              child: FaIcon(FontAwesomeIcons.userPlus)
+              child: Icon(MdiIcons.accountPlus)
             )
         )
     );

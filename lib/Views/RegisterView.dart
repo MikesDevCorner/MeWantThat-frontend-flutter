@@ -1,8 +1,8 @@
-import '../Libs/ApiService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../Libs/ApiService.dart';
 
 class RegisterView extends StatefulWidget {
 
@@ -80,35 +80,35 @@ class RegisterViewState extends State<RegisterView> {
                   autovalidate: _autoValidate,
                   child: Column(
                     children: <Widget>[
-                      Text('Register an Account for Shopping List', style: Theme.of(context).textTheme.headline5.merge(TextStyle(color: Colors.white))),
+                      Text('Register an Account for Shopping List', style: Theme.of(context).primaryTextTheme.headline5),
                       new SizedBox(
                         height: 20.0,
                       ),
                       TextFormField(
-                        style: TextStyle(color: Colors.white),
-                        decoration: InputDecoration(labelText: 'Name', labelStyle: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Theme.of(context).backgroundColor),
+                        decoration: InputDecoration(labelText: 'Name', labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
                         keyboardType: TextInputType.text,
                         controller: myNameController,
                         validator: validateName
                       ),
                       TextFormField(
-                        style: TextStyle(color: Colors.white),
-                        decoration: InputDecoration(labelText: 'E-Mail', labelStyle: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Theme.of(context).backgroundColor),
+                        decoration: InputDecoration(labelText: 'E-Mail', labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
                         keyboardType: TextInputType.emailAddress,
                         controller: myEMailController,
                         validator: validateEmail,
                       ),
                       TextFormField(
-                        style: TextStyle(color: Colors.white),
-                        decoration: InputDecoration(labelText: 'Password', labelStyle: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Theme.of(context).backgroundColor),
+                        decoration: InputDecoration(labelText: 'Password', labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
                         keyboardType: TextInputType.text,
                         obscureText: true,
                         controller: myPasswordController,
                         validator: validatePassword
                       ),
                       TextFormField(
-                        style: TextStyle(color: Colors.white),
-                        decoration: InputDecoration(labelText: 'Password again', labelStyle: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Theme.of(context).backgroundColor),
+                        decoration: InputDecoration(labelText: 'Password again', labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
                         keyboardType: TextInputType.text,
                         obscureText: true,
                         controller: myPasswordConfirmController,
@@ -120,8 +120,8 @@ class RegisterViewState extends State<RegisterView> {
                       ConstrainedBox(
                         constraints: const BoxConstraints(minWidth: double.infinity),
                         child: RaisedButton(
-                          color: const Color(0xff062f77),
-                          textColor: Colors.white,
+                          color: Theme.of(context).accentColor,
+                          textColor: Theme.of(context).backgroundColor,
                           onPressed: () {
                             _validateInputs(ctxt);
                           },
@@ -137,12 +137,12 @@ class RegisterViewState extends State<RegisterView> {
         ),
         floatingActionButton: Builder(
             builder: (ctxt) => FloatingActionButton(
-              backgroundColor: const Color(0xff062f77),
+              backgroundColor: Theme.of(context).accentColor,
               onPressed: () {
                 Navigator.pop(context);
               },
               tooltip: 'Switch to Login',
-              child: FaIcon(FontAwesomeIcons.signInAlt),
+              child: Icon(Icons.arrow_back),
             )
         )
     );

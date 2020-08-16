@@ -58,6 +58,13 @@ class ApiService {
     return true;
   }
 
+  static bool unregister() {
+    http.post(ApiService.url + '/unregister', headers: AuthService.getHeaders());
+    AuthService.setToken(null);
+    return true;
+  }
+
+
   static Future<List<ShoppingList>> fetchShoppingLists() async {
     final response = await http.get(ApiService.url + '/lists', headers: AuthService.getHeaders());
     if (response.statusCode == 200) {

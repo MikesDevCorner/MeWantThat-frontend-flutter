@@ -1,9 +1,9 @@
 import 'package:intl/intl.dart';
-
-import '../Classes/ShoppingList.dart';
-import '../Libs/ApiService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../Classes/ShoppingList.dart';
+import '../Libs/ApiService.dart';
+import '../Libs/MenuService.dart';
 
 
 class AllListsView extends StatefulWidget {
@@ -18,22 +18,20 @@ class AllListsViewState extends State<AllListsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: MenuService.getDrawer(context),
       appBar: AppBar(
         title: Text('Shopping Lists'),
-        actions: <Widget>[
-          Container(
-            padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+        actions: <Widget>[Builder(
+          builder: (ctxt) => Container(
+            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: IconButton(
               icon: Icon(
-                Icons.power_settings_new,
-                color: Colors.white,
+                Icons.menu,
+                color: Theme.of(context).backgroundColor,
               ),
-              onPressed: () {
-                ApiService.logout();
-                Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
-              },
+              onPressed: () => Scaffold.of(ctxt).openEndDrawer(),
             )
-          )
+          ))
         ],
       ),
       body: Center(
@@ -55,7 +53,6 @@ class AllListsViewState extends State<AllListsView> {
       ),
       floatingActionButton: Builder(
         builder: (ctxt) => FloatingActionButton(
-          backgroundColor: const Color(0xff062f77),
           onPressed: () async {
             final dynamic result = await Navigator.pushNamed(context, '/new-list');
             if(result == true) {
@@ -86,12 +83,12 @@ class AllListsViewState extends State<AllListsView> {
           fontWeight: FontWeight.w500,
           fontSize: 20,
         )),
-    subtitle: Text(myDFormat.format(DateTime.parse(shoppingList.created_at).toLocal())),
+    subtitle: Text(myDFormat.format(DateTime.parse(shoppingList.created_at).toLocal()), style: Theme.of(context).textTheme.subtitle2),
     leading: Icon(
       icon,
-      color: Colors.blue[500],
+      color: Theme.of(context).primaryColor,
     ),
-    trailing: IconButton(icon: Icon(Icons.delete), onPressed: () async {
+    trailing: IconButton(icon: Icon(Icons.delete, color: Theme.of(context).indicatorColor), onPressed: () async {
       await ApiService.deleteShoppingList(shoppingList.id);
       Scaffold
           .of(context)

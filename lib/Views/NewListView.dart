@@ -1,6 +1,7 @@
-import '../Libs/ApiService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../Libs/ApiService.dart';
+import '../Libs/MenuService.dart';
 
 class NewListView extends StatefulWidget {
   @override
@@ -18,21 +19,20 @@ class NewListFormState extends State<NewListView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: MenuService.getDrawer(context),
       appBar: AppBar(
         title: Text('New List'),
-        actions: <Widget>[
-        Container(
-        padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-        child: IconButton(
-            icon: Icon(
-              Icons.power_settings_new,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              ApiService.logout();
-              Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
-            })
-          )
+        actions: <Widget>[Builder(
+            builder: (ctxt) => Container(
+                padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.menu,
+                    color: Theme.of(context).backgroundColor,
+                  ),
+                  onPressed: () => Scaffold.of(ctxt).openEndDrawer(),
+                )
+            ))
         ],
       ),
       body: SingleChildScrollView(
@@ -63,8 +63,6 @@ class NewListFormState extends State<NewListView> {
                   ConstrainedBox(
                     constraints: const BoxConstraints(minWidth: double.infinity),
                       child: RaisedButton(
-                      color: Colors.blue,
-                      textColor: Colors.white,
                       onPressed: () async {
                         // Validate returns true if the form is valid, otherwise false.
                         if (_formKey.currentState.validate() == false) {

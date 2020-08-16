@@ -6,6 +6,7 @@ import 'package:ShoppingList_Flutter/Views/SingleListView.dart';
 import 'package:flutter/material.dart';
 import 'Views/AllListsView.dart';
 import './Libs/AuthService.dart';
+import './Libs/ThemeService.dart';
 
 void main() {
   runApp(App());
@@ -36,9 +37,8 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    if(alreadyInitiated == false) return new Container(color: Colors.lightBlue);
-
-    return MaterialApp(
+    if(alreadyInitiated == false) return new Container(color: ThemeService.prime);
+    else return MaterialApp(
       title: 'Shopping Lists',
       initialRoute: '/',
       routes: {
@@ -48,7 +48,8 @@ class _AppState extends State<App> {
         '/single-list': (context) => AuthService.isAuth() ? SingleListView() : LoginView(),
         '/new-list': (context) => AuthService.isAuth() ? NewListView() : LoginView(),
         '/new-entry': (context) => AuthService.isAuth() ? NewEntryView() : LoginView()
-      }
+      },
+      theme: ThemeService.getTheme(context),
     );
   }
 }

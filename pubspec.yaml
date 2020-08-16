@@ -11,13 +11,27 @@ dependencies:
   intl: ^0.16.1
   flutter_secure_storage: ^3.3.3
   font_awesome_flutter: ^8.8.1
+  google_fonts: 1.1.0
+  material_design_icons_flutter: 4.0.5345
+  tinycolor: 1.0.2
   flutter:
     sdk: flutter
   cupertino_icons: ^0.1.3
 
 dev_dependencies:
+  flutter_launcher_icons: 0.7.5
   flutter_test:
     sdk: flutter
 
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "assets/launcher/icon.png"
+  image_path_android: "assets/launcher/icon.png"
+  adaptive_icon_background: "assets/launcher/background.png"
+  adaptive_icon_foreground: "assets/launcher/foreground.png"
+
 flutter:
   uses-material-design: true
+  assets:
+    - assets/
