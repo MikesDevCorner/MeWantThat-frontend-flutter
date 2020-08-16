@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ShoppingList_Flutter/Libs/AuthService.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -27,12 +29,12 @@ class ApiService {
         if (await AuthService.checkUnauthenticated(response))
           return false;
         else
-          throw Exception("some error occured during login");
+          throw Exception("some error occured during login: ");
       }
   }
 
   static Future<dynamic> register(String email, String password, String passwordConfirm, String name) async {
-    final response = await http.post(ApiService.url + '/login',
+    final response = await http.post(ApiService.url + '/register',
         headers: AuthService.getHeaders(),
         body: jsonEncode(<String, String>{
           'email': email,
@@ -40,15 +42,24 @@ class ApiService {
           'name': name,
           'password_confirmation': passwordConfirm
         }));
+    final Map parsed = json.decode(response.body);
     if (response.statusCode == 201) {
-      final Map parsed = json.decode(response.body);
       await AuthService.setToken(parsed['success']['token']);
-      return true;
+      return "success";
+    } else if(response.statusCode == 400) {
+      String msg = "";
+      Map errors = parsed["error"];
+      errors.forEach((key, value) {
+        for(int i = 0; i < value.length; i++) {
+          msg += key + ": " + value[i] + "\r\n";
+        }
+      });
+      return msg;
     } else if(await AuthService.checkUnauthenticated(response)) {
-      return false;
+      return "somehow, the server says you are not authenticated. he should not say that.";
     }
     else {
-      throw Exception("some error occured during register");
+      return "sorry, some unknown error occured during register";
     }
   }
 

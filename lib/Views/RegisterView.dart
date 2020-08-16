@@ -26,16 +26,16 @@ class RegisterViewState extends State<RegisterView> {
 
   void _validateInputs (BuildContext ctxt) async {
     if (_formKey.currentState.validate()) {
-      bool register = await ApiService.register(myEMailController.text,
+      String register = await ApiService.register(myEMailController.text,
         myPasswordController.text, myPasswordConfirmController.text, myNameController.text);
-      if(!register) {
-        Scaffold.of(ctxt).showSnackBar(SnackBar(content:
-        Text('System says you are unauthenticated')));
-      } else {
+      if(register == "success") {
         Scaffold.of(ctxt).showSnackBar(SnackBar(content:
         Text('Login and Register Successful')));
         Navigator.pushNamedAndRemoveUntil(context,
             '/', (route) => false);
+      } else {
+        Scaffold.of(ctxt).showSnackBar(SnackBar(content:
+        Text(register)));
       }
     } else {
       //If all data are not valid then start auto validation.
@@ -53,16 +53,23 @@ class RegisterViewState extends State<RegisterView> {
     RegExp regex = new RegExp(pattern);
     if (!regex.hasMatch(value))
       return 'Enter Valid Email';
-    else
-      return null;
+    else if(value == "") return 'E-Mail should not be empty';
+    else return null;
   }
 
   String validatePassword(String value) {
-      return null;
+      if(value.length < 8) return 'Password should at least be 8 characters';
+      else if(value.length == 0) return 'Password should not be empty';
+      else return null;
   }
 
   String validateName(String value) {
-    if(value.length > 60) return 'Reduce name to less than 60 characters';
+    RegExp regex = RegExp('^[a-zA-Z0-9_ ]*\$');
+    if (!regex.hasMatch(value)) {
+      return 'Only characters and digits are allowed';
+    }
+    else if(value.length > 60) return 'Reduce name to less than 60 characters';
+    else if(value.length == 0) return 'Name should not be empty';
     return null;
   }
 

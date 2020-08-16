@@ -21,6 +21,42 @@ class NewEntryViewState extends State<NewEntryView> {
   final myNameController = TextEditingController();
   final myAmountController = TextEditingController(text: '1');
 
+  bool _autoValidate = false;
+
+  void _validateInputs (BuildContext ctxt) async {
+    if (_formKey.currentState.validate()) {
+      Scaffold.of(ctxt).showSnackBar(SnackBar(content:Text('Creating entry...')));
+      Response r = await ApiService.addListEntry(shoppingList.id,
+          int.parse(myAmountController.text), myNameController.text);
+      if(r.statusCode == 401) {
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+      } else Navigator.pop(ctxt, true);
+    } else {
+      //If all data are not valid then start auto validation.
+      Scaffold.of(ctxt).showSnackBar(SnackBar(content:
+      Text('Please check your input fields')));
+      setState(() {
+        _autoValidate = true;
+      });
+    }
+  }
+
+
+  String validateName(String value) {
+    RegExp regex = RegExp('^[a-zA-Z0-9_ ]*\$');
+    if (!regex.hasMatch(value)) {
+      return 'Only characters and digits are allowed';
+    }
+    else if(value.length > 60) return 'Reduce name to less than 60 characters';
+    else if(value == "") return 'Name should not be empty';
+    return null;
+  }
+
+  String validatorAmount(String value) {
+    if(int.parse(value) > 9999) return "value should be less than 9999";
+    else return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     this.shoppingList = ModalRoute.of(context).settings.arguments;
@@ -48,15 +84,13 @@ class NewEntryViewState extends State<NewEntryView> {
                   padding: const EdgeInsets.all(40.0),
                   child:Form(
                     key: _formKey,
+                    autovalidate: _autoValidate,
                     child: Column(
                         children: <Widget>[
                           TextFormField(
                             decoration: InputDecoration(labelText: 'Entryname'),
                             controller: myNameController,
-                            validator: (value) {
-                              if (value.isEmpty) {return 'Please enter a name';}
-                              return null;
-                            },
+                            validator: validateName
                           ),
                           TextFormField(
                             decoration: InputDecoration(
@@ -65,10 +99,7 @@ class NewEntryViewState extends State<NewEntryView> {
                             inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
                             keyboardType: TextInputType.number,
                             controller: myAmountController,
-                            validator: (value) {
-                              if (value.isEmpty) { return 'Please enter an amount';}
-                              return null;
-                            },
+                            validator: validatorAmount
                           ),
                           new SizedBox(
                             height: 20.0,
@@ -76,21 +107,8 @@ class NewEntryViewState extends State<NewEntryView> {
                           ConstrainedBox(
                               constraints: const BoxConstraints(minWidth: double.infinity),
                               child: RaisedButton(
-                                onPressed: () async {
-                                  if (_formKey.currentState.validate() == false) {
-                                    Scaffold.of(ctxt).showSnackBar(SnackBar(content:
-                                    Text('Fields should not be empty.')));
-                                  } else {
-                                    Scaffold.of(ctxt).showSnackBar(SnackBar(content:
-                                    Text('Creating entry...')));
-                                    Response r = await ApiService.addListEntry(shoppingList.id,
-                                        int.parse(myAmountController.text), myNameController.text);
-                                    if(r.statusCode == 401) {
-                                      Navigator.pushNamedAndRemoveUntil(context,
-                                          '/login', (route) => false);
-                                    }
-                                    else Navigator.pop(ctxt, true);
-                                  }
+                                onPressed: () {
+                                  _validateInputs(ctxt);
                                 },
                                 child: Text('Save'),
                               )
