@@ -39,12 +39,21 @@ class AllListsViewState extends State<AllListsView> {
           future: ApiService.fetchShoppingLists(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return _shoppingListView(snapshot.data);
+              if(snapshot.data.length == 0) {
+                return Container(
+                    alignment: Alignment.bottomRight,
+                    padding: const EdgeInsets.fromLTRB(0, 0, 30, 50),
+                    child:Image.asset('assets/first_list_hint.png', height: 300, filterQuality:FilterQuality.high)
+                );
+              } else return _shoppingListView(snapshot.data);
             } else if (snapshot.hasError) {
               if(snapshot.error.toString() == '401') {
                 Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
               }
-              else return Text("${snapshot.error}");
+              else {
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text('network error on loading lists')));
+                return null; //Text("${snapshot.error}");
+              }
             }
             // By default, show a loading spinner
             return CircularProgressIndicator();
