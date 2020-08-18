@@ -16,6 +16,7 @@ class ThemeService {
       accentColor: ThemeService.accent,
       backgroundColor: ThemeService.back,
       scaffoldBackgroundColor: ThemeService.back,
+      dialogBackgroundColor: ThemeService.back,
       buttonColor: ThemeService.accent,
       cursorColor: ThemeService.textAlt,
       focusColor: ThemeService.accent,
@@ -30,7 +31,7 @@ class ThemeService {
           headline2: TextStyle(color: ThemeService.back),
           headline3: TextStyle(color: ThemeService.back),
           headline4: TextStyle(color: ThemeService.back),
-          headline5: TextStyle(color: ThemeService.back),
+          headline5: TextStyle(color: ThemeService.back, fontSize: 20.0, ),
           headline6: TextStyle(color: ThemeService.back),
           subtitle1: TextStyle(color: ThemeService.back),
           subtitle2: TextStyle(color: ThemeService.back),
@@ -78,6 +79,26 @@ class ThemeService {
             borderSide: BorderSide(color: TinyColor(ThemeService.accent).lighten(12).color),
           )
       )
+    );
+  }
+
+  static TextTheme getAlternativeTextTheme() {
+    return GoogleFonts.caveatTextTheme(
+      TextTheme( //contrasts with primary color
+        headline1: TextStyle(color: ThemeService.text),
+        headline2: TextStyle(color: ThemeService.text),
+        headline3: TextStyle(color: ThemeService.text),
+        headline4: TextStyle(color: ThemeService.text),
+        headline5: TextStyle(color: ThemeService.text),
+        headline6: TextStyle(color: const Color(0xffd5d5d5), fontSize: 26.0),
+        subtitle1: TextStyle(color: ThemeService.text),
+        subtitle2: TextStyle(color: ThemeService.text),
+        bodyText1: TextStyle(color: ThemeService.text),
+        bodyText2: TextStyle(color: ThemeService.text),
+        button: TextStyle(color: ThemeService.text),
+        caption: TextStyle(color: ThemeService.text),
+        overline: TextStyle(color: ThemeService.text),
+      ),
     );
   }
 

@@ -1,18 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../Libs/ApiService.dart';
 
 class RegisterView extends StatefulWidget {
-
   RegisterView({Key key}) : super(key: key);
 
   @override
   RegisterViewState createState() {
     return RegisterViewState();
   }
-
 }
 
 class RegisterViewState extends State<RegisterView> {
@@ -81,13 +78,22 @@ class RegisterViewState extends State<RegisterView> {
           child:Builder(
             builder: (ctxt) => Center(
               child: Padding(
-                padding: const EdgeInsets.all(35.0),
+                padding: const EdgeInsets.fromLTRB(35.0, 50.0, 35.0, 35.0),
                 child:Form(
                   key: _formKey,
                   autovalidate: _autoValidate,
                   child: Column(
                     children: <Widget>[
-                      Text('Register an Account for Shopping List', style: Theme.of(context).primaryTextTheme.headline5),
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: new TextSpan( style: Theme.of(context).primaryTextTheme.headline5,
+                          children: <TextSpan>[
+                            TextSpan(text: 'Sign up for '),
+                            TextSpan(text: 'ME WANT THAT', style: new TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(text: ' and create an account:')
+                          ]
+                        )
+                      ),
                       new SizedBox(
                         height: 20.0,
                       ),

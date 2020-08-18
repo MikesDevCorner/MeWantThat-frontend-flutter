@@ -10,7 +10,7 @@ import 'dart:developer' as developer;
 
 class ApiService {
 
-  static final String url = 'https://shopping.mikesdevcorner.com/api';
+  static final String url = 'https://me-want-that/api';
 
 
   static Future<dynamic> login(String email, String password) async {

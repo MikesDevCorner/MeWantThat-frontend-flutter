@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../Classes/ShoppingList.dart';
 import '../Libs/ApiService.dart';
 import '../Libs/MenuService.dart';
+import '../Libs/ThemeService.dart';
 
 
 class AllListsView extends StatefulWidget {
@@ -40,10 +41,21 @@ class AllListsViewState extends State<AllListsView> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if(snapshot.data.length == 0) {
-                return Container(
-                    alignment: Alignment.bottomRight,
-                    padding: const EdgeInsets.fromLTRB(0, 0, 30, 50),
-                    child:Image.asset('assets/first_list_hint.png', height: 300, filterQuality:FilterQuality.high)
+                return Column(
+                  children: <Widget>[
+                    Expanded(
+//                      padding: const EdgeInsets.fromLTRB(0, 0, 30, 50),
+                      child: Container(
+                          padding: const EdgeInsets.all(50.0),
+                          child: Text("vast emptyness", style: ThemeService.getAlternativeTextTheme().headline6)
+                      )
+                    ),
+                    Container(
+                        alignment: Alignment.bottomRight,
+                        padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 50.0),
+                        child:Image.asset('assets/first_list_hint.png', height: 300, filterQuality:FilterQuality.high)
+                    )
+                  ]
                 );
               } else return _shoppingListView(snapshot.data);
             } else if (snapshot.hasError) {
