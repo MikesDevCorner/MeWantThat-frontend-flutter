@@ -4,6 +4,7 @@ import '../Classes/ShoppingList.dart';
 import '../Classes/ShoppingEntry.dart';
 import '../Libs/ApiService.dart';
 import '../Libs/MenuService.dart';
+import '../Libs/ThemeService.dart';
 
 class SingleListView extends StatefulWidget {
   SingleListView({Key key}) : super(key: key);
@@ -50,12 +51,32 @@ class SingleListViewState extends State<SingleListView> {
           future: ApiService.fetchShoppingEntries(shoppingList.id),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return _singleListView(snapshot.data);
+              if(snapshot.data.length == 0) {
+                return Column(
+                    children: <Widget>[
+                      Expanded(
+//                      padding: const EdgeInsets.fromLTRB(0, 0, 30, 50),
+                          child: Container(
+                              padding: const EdgeInsets.all(50.0),
+                              child: Text("vast emptyness", style: ThemeService.getAlternativeTextTheme().headline6)
+                          )
+                      ),
+                      Container(
+                          alignment: Alignment.bottomRight,
+                          padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 50.0),
+                          child:Image.asset('assets/first_entry_hint.png', height: 300, filterQuality:FilterQuality.high)
+                      )
+                    ]
+                );
+              } else return _singleListView(snapshot.data);
             } else if (snapshot.hasError) {
               if(snapshot.error.toString() == '401') {
                 Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
               }
-              else return Text("${snapshot.error}");
+              else {
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text('network error on loading lists')));
+                return null; //Text("${snapshot.error}");
+              }
             }
             // By default, show a loading spinner
             return CircularProgressIndicator();

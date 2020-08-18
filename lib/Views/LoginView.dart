@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../Libs/ApiService.dart';
 
@@ -56,10 +55,6 @@ class LoginViewState extends State<LoginView> {
       return null;
   }
 
-  String validatePassword(String value) {
-      return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,8 +89,7 @@ class LoginViewState extends State<LoginView> {
                         decoration: InputDecoration(labelText: 'Password', labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
                         keyboardType: TextInputType.text,
                         obscureText: true,
-                        controller: myPasswordController,
-                        validator: validatePassword
+                        controller: myPasswordController
                       ),
                       new SizedBox(
                         height: 20.0,

@@ -1,10 +1,10 @@
-import 'package:ShoppingList_Flutter/Views/LoginView.dart';
-import 'package:ShoppingList_Flutter/Views/NewEntryView.dart';
-import 'package:ShoppingList_Flutter/Views/NewListView.dart';
-import 'package:ShoppingList_Flutter/Views/RegisterView.dart';
-import 'package:ShoppingList_Flutter/Views/SingleListView.dart';
 import 'package:flutter/material.dart';
-import 'Views/AllListsView.dart';
+import './Views/AllListsView.dart';
+import './Views/LoginView.dart';
+import './Views/NewEntryView.dart';
+import './Views/NewListView.dart';
+import './Views/RegisterView.dart';
+import './Views/SingleListView.dart';
 import './Libs/AuthService.dart';
 import './Libs/ThemeService.dart';
 
