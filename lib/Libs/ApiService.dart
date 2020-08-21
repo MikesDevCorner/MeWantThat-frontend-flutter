@@ -1,16 +1,13 @@
-import 'dart:developer';
-
 import 'package:ShoppingList_Flutter/Libs/AuthService.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../Classes/ShoppingList.dart';
 import '../Classes/ShoppingEntry.dart';
 import './AuthService.dart';
-import 'dart:developer' as developer;
 
 class ApiService {
 
-  static final String url = 'https://me-want-that/api';
+  static final String url = 'https://me-want-that.com/api';
 
 
   static Future<dynamic> login(String email, String password) async {

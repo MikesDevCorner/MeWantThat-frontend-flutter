@@ -11,15 +11,14 @@ class SingleListView extends StatefulWidget {
   @override
   SingleListViewState createState() => new SingleListViewState();
 }
-
-
 class SingleListViewState extends State<SingleListView> {
 
   ShoppingList shoppingList;
   SingleListViewState() : super();
 
   navigateNewEntry(BuildContext context, BuildContext snackbarContext) async {
-    final dynamic result = await Navigator.pushNamed(context, '/new-entry', arguments: shoppingList);
+    final dynamic result = await Navigator.pushNamed(context,
+        '/new-entry', arguments: shoppingList);
     if(result == true) Scaffold
         .of(snackbarContext)
         .showSnackBar(SnackBar(content: Text('Entry added successfully.')));
@@ -55,16 +54,17 @@ class SingleListViewState extends State<SingleListView> {
                 return Column(
                     children: <Widget>[
                       Expanded(
-//                      padding: const EdgeInsets.fromLTRB(0, 0, 30, 50),
                           child: Container(
                               padding: const EdgeInsets.all(50.0),
-                              child: Text("vast emptyness", style: ThemeService.getAlternativeTextTheme().headline6)
+                              child: Text("vast emptyness",
+                                  style: ThemeService.getAlternativeTextTheme().headline6)
                           )
                       ),
                       Container(
                           alignment: Alignment.bottomRight,
                           padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 50.0),
-                          child:Image.asset('assets/first_entry_hint.png', height: 300, filterQuality:FilterQuality.high)
+                          child:Image.asset('assets/first_entry_hint.png',
+                              height: 300, filterQuality:FilterQuality.high)
                       )
                     ]
                 );
@@ -113,7 +113,8 @@ class SingleListViewState extends State<SingleListView> {
       icon,
       color: Theme.of(context).primaryColor,
     ),
-    trailing: IconButton(icon: Icon(Icons.delete, color: Theme.of(context).indicatorColor), onPressed: () async {
+    trailing: IconButton(icon: Icon(Icons.delete, color: Theme.of(context)
+        .indicatorColor), onPressed: () async {
       await ApiService.deleteListEntry(entry.id);
       Scaffold.of(context).showSnackBar(SnackBar(content: Text('Entry deleted successfully.')));
       this.setState(() {});

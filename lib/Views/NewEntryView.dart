@@ -43,7 +43,7 @@ class NewEntryViewState extends State<NewEntryView> {
 
 
   String validateName(String value) {
-    RegExp regex = RegExp('^[a-zA-Z0-9_ ]*\$');
+    RegExp regex = RegExp('^[a-zA-Z0-9üÜäÄöÖß_ ]*\$');
     if (!regex.hasMatch(value)) {
       return 'Only characters and digits are allowed';
     }
@@ -54,6 +54,7 @@ class NewEntryViewState extends State<NewEntryView> {
 
   String validatorAmount(String value) {
     if(int.parse(value) > 9999) return "value should be less than 9999";
+    if(int.parse(value) < 0) return "value should be positive";
     else return null;
   }
 
