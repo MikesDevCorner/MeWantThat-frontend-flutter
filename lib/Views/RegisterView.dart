@@ -24,7 +24,8 @@ class RegisterViewState extends State<RegisterView> {
   void _validateInputs (BuildContext ctxt) async {
     if (_formKey.currentState.validate()) {
       String register = await ApiService.register(myEMailController.text,
-        myPasswordController.text, myPasswordConfirmController.text, myNameController.text);
+        myPasswordController.text, myPasswordConfirmController.text,
+          myNameController.text);
       if(register == "success") {
         Scaffold.of(ctxt).showSnackBar(SnackBar(content:
         Text('Login and Register Successful')));
@@ -46,10 +47,11 @@ class RegisterViewState extends State<RegisterView> {
 
   String validateEmail(String value) {
     Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\'
+        r'.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regex = new RegExp(pattern);
     if (!regex.hasMatch(value))
-      return 'Enter Valid Email';
+      return 'Enter valid Email';
     else if(value == "") return 'E-Mail should not be empty';
     else return null;
   }
@@ -60,8 +62,13 @@ class RegisterViewState extends State<RegisterView> {
       else return null;
   }
 
+  String validatePassword2(String value) {
+    if(myPasswordController.text != value) return "Passwords do not match";
+    else return validatePassword(value);
+  }
+
   String validateName(String value) {
-    RegExp regex = RegExp('^[a-zA-Z0-9_ ]*\$');
+    RegExp regex = RegExp('^[a-zA-Z0-9üÜäÄöÖß_ ]*\$');
     if (!regex.hasMatch(value)) {
       return 'Only characters and digits are allowed';
     }
@@ -86,10 +93,12 @@ class RegisterViewState extends State<RegisterView> {
                     children: <Widget>[
                       RichText(
                         textAlign: TextAlign.center,
-                        text: new TextSpan( style: Theme.of(context).primaryTextTheme.headline5,
+                        text: new TextSpan( style: Theme.of(context)
+                            .primaryTextTheme.headline5,
                           children: <TextSpan>[
                             TextSpan(text: 'Sign up for '),
-                            TextSpan(text: 'ME WANT THAT', style: new TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(text: 'ME WANT THAT',
+                                style: new TextStyle(fontWeight: FontWeight.bold)),
                             TextSpan(text: ' and create an account:')
                           ]
                         )
@@ -99,21 +108,24 @@ class RegisterViewState extends State<RegisterView> {
                       ),
                       TextFormField(
                         style: TextStyle(color: Theme.of(context).backgroundColor),
-                        decoration: InputDecoration(labelText: 'Name', labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
+                        decoration: InputDecoration(labelText: 'Name',
+                            labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
                         keyboardType: TextInputType.text,
                         controller: myNameController,
                         validator: validateName
                       ),
                       TextFormField(
                         style: TextStyle(color: Theme.of(context).backgroundColor),
-                        decoration: InputDecoration(labelText: 'E-Mail', labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
+                        decoration: InputDecoration(labelText: 'E-Mail',
+                            labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
                         keyboardType: TextInputType.emailAddress,
                         controller: myEMailController,
                         validator: validateEmail,
                       ),
                       TextFormField(
                         style: TextStyle(color: Theme.of(context).backgroundColor),
-                        decoration: InputDecoration(labelText: 'Password', labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
+                        decoration: InputDecoration(labelText: 'Password',
+                            labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
                         keyboardType: TextInputType.text,
                         obscureText: true,
                         controller: myPasswordController,
@@ -121,11 +133,12 @@ class RegisterViewState extends State<RegisterView> {
                       ),
                       TextFormField(
                         style: TextStyle(color: Theme.of(context).backgroundColor),
-                        decoration: InputDecoration(labelText: 'Password again', labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
+                        decoration: InputDecoration(labelText: 'Password again',
+                            labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
                         keyboardType: TextInputType.text,
                         obscureText: true,
                         controller: myPasswordConfirmController,
-                        validator: validatePassword
+                        validator: validatePassword2
                       ),
                       new SizedBox(
                         height: 30.0,

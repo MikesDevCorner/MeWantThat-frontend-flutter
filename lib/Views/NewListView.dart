@@ -11,13 +11,9 @@ class NewListView extends StatefulWidget {
   }
 }
 
-// Define a corresponding State class.
-// This class holds data related to the form.
 class NewListFormState extends State<NewListView> {
   final _formKey = GlobalKey<FormState>();
   final myNameController = TextEditingController();
-
-
   bool _autoValidate = false;
 
   void _validateInputs (BuildContext ctxt) async {
@@ -42,7 +38,7 @@ class NewListFormState extends State<NewListView> {
 
 
   String validateName(String value) {
-    RegExp regex = RegExp('^[a-zA-Z0-9_ ]*\$');
+    RegExp regex = RegExp('^[a-zA-Z0-9üÜäÄöÖß_ ]*\$');
     if (!regex.hasMatch(value)) {
       return 'Only characters and digits are allowed';
     }
@@ -84,10 +80,6 @@ class NewListFormState extends State<NewListView> {
                     decoration: InputDecoration(
                       labelText: 'Listname'
                     ),
-                    //inputFormatters: [
-                      //FilteringTextInputFormatter.deny(RegExp("[/\\\\]")),
-                      //FilteringTextInputFormatter.allow(RegExp('^[a-zA-Z0-9_ ]*\$')),
-                    //],
                     controller: myNameController,
                     // The validator receives the text that the user has entered.
                     validator: validateName,

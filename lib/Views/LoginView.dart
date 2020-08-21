@@ -5,14 +5,12 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import '../Libs/ApiService.dart';
 
 class LoginView extends StatefulWidget {
-
   LoginView({Key key}) : super(key: key);
 
   @override
   LoginViewState createState() {
     return LoginViewState();
   }
-
 }
 
 class LoginViewState extends State<LoginView> {
@@ -47,7 +45,8 @@ class LoginViewState extends State<LoginView> {
 
   String validateEmail(String value) {
     Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\'
+        r'.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regex = new RegExp(pattern);
     if (!regex.hasMatch(value))
       return 'Enter Valid Email';
@@ -73,20 +72,23 @@ class LoginViewState extends State<LoginView> {
                         height: 40.0,
                       ),
                       //Text('Shopping List', style: Theme.of(context).primaryTextTheme.headline3),
-                      Image.asset('assets/logosm.png', height: 200, filterQuality:FilterQuality.high),
+                      Image.asset('assets/logosm.png', height: 200,
+                          filterQuality:FilterQuality.high),
                       new SizedBox(
                         height: 40.0,
                       ),
                       TextFormField(
                         style: TextStyle(color: Theme.of(context).backgroundColor),
-                        decoration: InputDecoration(labelText: 'E-Mail', labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
+                        decoration: InputDecoration(labelText: 'E-Mail',
+                            labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
                         keyboardType: TextInputType.emailAddress,
                         controller: myEMailController,
                         validator: validateEmail,
                       ),
                       TextFormField(
                         style: TextStyle(color: Theme.of(context).backgroundColor),
-                        decoration: InputDecoration(labelText: 'Password', labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
+                        decoration: InputDecoration(labelText: 'Password',
+                            labelStyle: Theme.of(context).primaryTextTheme.bodyText2),
                         keyboardType: TextInputType.text,
                         obscureText: true,
                         controller: myPasswordController

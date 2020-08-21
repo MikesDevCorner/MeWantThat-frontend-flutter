@@ -1,23 +1,37 @@
-# shoppinglistflutter
+# Me Want That - Flutter Frontend
 
-Shopping List Flutter
+This piece of software is a mobile application, built with Google's Native Cross Platform Framework Flutter. It started 2020 as an example for a Masterthesis about Mobile Cross Platform Development (Tag v2.0). 
 
-## Getting Started
+## Prerequisites
 
-This project is a starting point for a Flutter application.
+You're going to need Flutter installed and available on your commandline. I recommend Android Studio with Flutter/Dart Plugin as preferred IDE.
 
-A few resources to get you started if this is your first Flutter project:
+## Some useful commmands
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+```bash
+flutter packages get
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter packages pub run flutter_launcher_icons:main
+```
 
+```bash
+flutter pub global activate devtools
+```
 
+```bash
+flutter pub global run devtools
+```
 
+```bash
+flutter run
+```
 
-```flutter packages get```
+Checkout [this](https://medium.com/flutter-community/flutter-and-the-command-line-a-love-story-a3648ef2411) resource for further CLI love
 
-```flutter packages pub run flutter_launcher_icons:main```
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
+
+## Author
+[Michael Wagner](https://mikesdevcorner.com)

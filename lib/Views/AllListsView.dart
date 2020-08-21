@@ -47,13 +47,15 @@ class AllListsViewState extends State<AllListsView> {
 //                      padding: const EdgeInsets.fromLTRB(0, 0, 30, 50),
                       child: Container(
                           padding: const EdgeInsets.all(50.0),
-                          child: Text("vast emptyness", style: ThemeService.getAlternativeTextTheme().headline6)
+                          child: Text("vast emptyness", style: ThemeService
+                              .getAlternativeTextTheme().headline6)
                       )
                     ),
                     Container(
                         alignment: Alignment.bottomRight,
                         padding: const EdgeInsets.fromLTRB(0, 0, 30.0, 50.0),
-                        child:Image.asset('assets/first_list_hint.png', height: 300, filterQuality:FilterQuality.high)
+                        child:Image.asset('assets/first_list_hint.png',
+                            height: 300, filterQuality:FilterQuality.high)
                     )
                   ]
                 );
@@ -63,7 +65,8 @@ class AllListsViewState extends State<AllListsView> {
                 Navigator.pushNamedAndRemoveUntil(context,'/login', (route) => false);
               }
               else {
-                Scaffold.of(context).showSnackBar(SnackBar(content: Text('network error on loading lists')));
+                Scaffold.of(context).showSnackBar(SnackBar(content:
+                Text('network error on loading lists')));
                 return null; //Text("${snapshot.error}");
               }
             }
@@ -104,12 +107,14 @@ class AllListsViewState extends State<AllListsView> {
           fontWeight: FontWeight.w500,
           fontSize: 20,
         )),
-    subtitle: Text(myDFormat.format(DateTime.parse(shoppingList.created_at).toLocal()), style: Theme.of(context).textTheme.subtitle2),
+    subtitle: Text(myDFormat.format(DateTime.parse(shoppingList.created_at)
+        .toLocal()), style: Theme.of(context).textTheme.subtitle2),
     leading: Icon(
       icon,
       color: Theme.of(context).primaryColor,
     ),
-    trailing: IconButton(icon: Icon(Icons.delete, color: Theme.of(context).indicatorColor), onPressed: () async {
+    trailing: IconButton(icon: Icon(Icons.delete, color: Theme.of(context)
+        .indicatorColor), onPressed: () async {
       await ApiService.deleteShoppingList(shoppingList.id);
       Scaffold
           .of(context)
